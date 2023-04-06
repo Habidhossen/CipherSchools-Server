@@ -4,6 +4,7 @@ require("dotenv").config();
 require("./config/db_conn");
 const port = process.env.PORT || 4000;
 const app = express();
+const userRouter = require("./routes/user.route");
 
 // middleware
 app.use(
@@ -16,7 +17,8 @@ app.listen(port, () => {
   console.log("Listening on port", port);
 });
 
-// All Routes here...
+// All Routes here
+app.use("/api", userRouter);
 
 // Home Route
 app.get("/", (req, res) => {
