@@ -18,7 +18,7 @@ app.listen(port, () => {
 });
 
 // All Routes here
-app.use("/api", userRouter);
+app.use("/api/user", userRouter);
 
 // Home Route
 app.get("/", (req, res) => {

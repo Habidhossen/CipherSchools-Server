@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
+// registered user controller
 exports.createUser = async (req, res) => {
   const { firstName, lastName, email, phone, password } = req.body;
 
@@ -51,6 +52,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// login user controller
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -93,6 +95,36 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({
       status: "fail",
       message: "Data not inserted",
+      error: error.message,
+    });
+  }
+};
+
+// update user profile controller
+exports.updateUserProfile = async (req, res) => {
+  const { firstName, lastName, email, phone } = req.body;
+  const userId = req.user._id;
+
+  try {
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // update user fields
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+
+    await user.save();
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      message: "Failed to update profile",
       error: error.message,
     });
   }
